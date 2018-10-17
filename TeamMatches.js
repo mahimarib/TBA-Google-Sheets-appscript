@@ -4,9 +4,9 @@ function getTeamPlacement(match, teamKey) {
     var teamPlacement = [];
     for (var i = 0; i < 3; i++) {
         if (blueTeamKeys[i] == teamKey) {
-            teamPlacement.push("blue", i + 1);
+            teamPlacement.push('blue', i + 1);
         } else if (redTeamKeys[i] == teamKey) {
-            teamPlacement.push("red", i + 1);
+            teamPlacement.push('red', i + 1);
         }
     }
     return teamPlacement;
@@ -14,18 +14,24 @@ function getTeamPlacement(match, teamKey) {
 
 /**
  * Returns the match names of the given event with the given format `[COMP_LEVEL] match [MATCH_NUMBER]`.
- * A set number may be appended to 
+ * A set number may be appended to
  * the competition level if more than one match in required per set.
  * Only used only for: `/team/{team_key}/event/{event_key}/matches`
  *
  * @param {"frc4571"} teamKey TBA Team keys (eg `frc4571`)
- * @param {"2018nyny"} eventKey TBA event key with the format `yyyy[EVENT_CODE]`, 
- *                              where `yyyy` is the year, and `EVENT_CODE` is the 
+ * @param {"2018nyny"} eventKey TBA event key with the format `yyyy[EVENT_CODE]`,
+ *                              where `yyyy` is the year, and `EVENT_CODE` is the
  *                              event code of the event.
- * @customFunction 
+ * @customFunction
  */
 function getTeamMatches(teamKey, eventKey) {
-    var matches = getJSON("https://www.thebluealliance.com/api/v3/team/" + teamKey + "/event/" + eventKey + "/matches");
+    var matches = getJSON(
+        'https://www.thebluealliance.com/api/v3/team/' +
+            teamKey +
+            '/event/' +
+            eventKey +
+            '/matches'
+    );
     var matchNames = [];
     for (var i in matches) {
         var compLevel = matches[i].comp_level;
@@ -38,34 +44,42 @@ function getTeamMatches(teamKey, eventKey) {
 
 function convertMatchNames(compLevel, setNumber, matchNumber) {
     switch (compLevel) {
-        case "qm":
-            return "qualification match " + matchNumber;
-        case "qf":
-            return "quarter finals " + setNumber + " match " + matchNumber;
-        case "sf":
-            return "semi finals " + setNumber + " match " + matchNumber;
-        case "f":
-            return "finals match " + matchNumber;
+        case 'qm':
+            return 'qualification match ' + matchNumber;
+        case 'qf':
+            return 'quarter finals ' + setNumber + ' match ' + matchNumber;
+        case 'sf':
+            return 'semi finals ' + setNumber + ' match ' + matchNumber;
+        case 'f':
+            return 'finals match ' + matchNumber;
     }
 }
 
 /**
  * Returns the status of the robot when match finished, used only for: `/team/{team_key}/event/{event_key}/matches`
  *
- * @param {"frc4571"} teamKey TBA Team keys (eg `frc4571`) 
- * @param {"2018nyny"} eventKey TBA event key with the format `yyyy[EVENT_CODE]`, 
- *                              where `yyyy` is the year, and `EVENT_CODE` is the 
+ * @param {"frc4571"} teamKey TBA Team keys (eg `frc4571`)
+ * @param {"2018nyny"} eventKey TBA event key with the format `yyyy[EVENT_CODE]`,
+ *                              where `yyyy` is the year, and `EVENT_CODE` is the
  *                              event code of the event.
- * @customFunction 
+ * @customFunction
  */
 function getEndGameStat(teamKey, eventKey) {
-    var matches = getJSON("https://www.thebluealliance.com/api/v3/team/" + teamKey + "/event/" + eventKey + "/matches");
+    var matches = getJSON(
+        'https://www.thebluealliance.com/api/v3/team/' +
+            teamKey +
+            '/event/' +
+            eventKey +
+            '/matches'
+    );
     var endGameStats = [];
     for (var i in matches) {
-    var teamPlacement = getTeamPlacement(matches[i], teamKey);
+        var teamPlacement = getTeamPlacement(matches[i], teamKey);
         var alliance = teamPlacement[0];
         var number = teamPlacement[1];
-        endGameStats.push(matches[i].score_breakdown[alliance]['endgameRobot' + number]);
+        endGameStats.push(
+            matches[i].score_breakdown[alliance]['endgameRobot' + number]
+        );
     }
     return endGameStats;
 }
@@ -73,20 +87,28 @@ function getEndGameStat(teamKey, eventKey) {
 /**
  * Returns whether robot crossed the line, used only for: `/team/{team_key}/event/{event_key}/matches`
  *
- * @param {"frc4571"} teamKey TBA Team keys (eg `frc4571`) 
- * @param {"2018nyny"} eventKey TBA event key with the format `yyyy[EVENT_CODE]`, 
- *                              where `yyyy` is the year, and `EVENT_CODE` is the 
+ * @param {"frc4571"} teamKey TBA Team keys (eg `frc4571`)
+ * @param {"2018nyny"} eventKey TBA event key with the format `yyyy[EVENT_CODE]`,
+ *                              where `yyyy` is the year, and `EVENT_CODE` is the
  *                              event code of the event.
- * @customFunction 
+ * @customFunction
  */
 function getAutoStat(teamKey, eventKey) {
-    var matches = getJSON("https://www.thebluealliance.com/api/v3/team/" + teamKey + "/event/" + eventKey + "/matches");
+    var matches = getJSON(
+        'https://www.thebluealliance.com/api/v3/team/' +
+            teamKey +
+            '/event/' +
+            eventKey +
+            '/matches'
+    );
     var AutoStats = [];
     for (var i in matches) {
         var teamPlacement = getTeamPlacement(matches[i], teamKey);
         var alliance = teamPlacement[0];
         var number = teamPlacement[1];
-        AutoStats.push(getAuto(matches[i].score_breakdown[alliance]['autoRobot' + number]));
+        AutoStats.push(
+            getAuto(matches[i].score_breakdown[alliance]['autoRobot' + number])
+        );
     }
     return AutoStats;
 }

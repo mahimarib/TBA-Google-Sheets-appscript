@@ -1,0 +1,14 @@
+{
+    "extends": "prettier",
+    "parserOptions": {
+        "ecmaVersion": 5
+    },
+    "parser": "esprima",
+    "env": {
+        "browser": true
+    },
+    "rules": {
+        "prettier/prettier": "warn"
+    },
+    "plugins": ["prettier"]
+}
